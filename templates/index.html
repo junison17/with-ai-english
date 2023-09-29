@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <title>영어문제출제</title>
+       
+       <style>
+         
+         .container {                
+                background-image: url("{{url_for('static',filename='img.jpg')}}");
+            }
+         
+         
+         
+         body {
+         
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                height: 100vh;
+                background-position: center;
+                background-size: cover;
+}
+
+        textarea {
+                  width: 707px;
+                  height: 173px;
+                  margin-top: 20px;
+                  padding: 10px;
+                  border: none;
+                  border-radius: 12px;
+                  font-family: monospace;
+                  font-size: 16px;
+                  color: #0e0002e9;
+                  resize: none;
+                  background-color: rgb(230, 223, 223);
+}
+
+          input {
+                    width: 803px;
+                    height: 50px;
+                    margin-top: 20px;
+                    padding: 10px;
+                    border: none;
+                    border-radius: 12px;
+                    font-family: sans-serif;
+                    font-size: 16px;
+                    color: #0e0002e9;
+                    background-color: #d7d5d5;
+                    text-align: center;
+}
+
+            button {
+                      width: 200px;
+                      height: 50px;
+                      margin-top: 20px;
+                      padding: 10px;
+                      border: none;
+                      border-radius: 12px;
+                      font-family: 'Roboto', sans-serif;
+                      font-size: 16px;
+                      font-weight: 100;
+                      color: white;
+                      background-color: #cf48d6;
+                      cursor: pointer;
+                      transition: background-color 0.3s ease;
+}
+
+          button:hover {
+                      background-color: #a83aa8;
+}
+        
+        </style>
+     
+    </head>
+    
+    <body class ="container">
+      <div><h1 style="color: gray;">영어문제출제 사이트</h1></div></br>
+      <div>문제를 만드세요</div>
+      <div><textarea id="text" ></textarea></div> 
+  
+      <div>어느 문제 유형으로 만드겠습니까?</div> 
+      <div><input id="language"  type="text"/></div> 
+          
+      <div>문제 만들기</div>
+      <button id="button" >submit</button>
+          
+  
+      <div>결과물 보기</div> 
+      <div><textarea id="result" ></textarea></div>
+      <script>
+          let textareaTag = document.getElementById("text");
+          let languageTag = document.getElementById("language");
+          let buttonTag = document.getElementById("button"); // 버튼 태그를 정의합니다.
+          let resultTag = document.getElementById("result");
+  
+          buttonTag.addEventListener("click", async function () {
+              let text = textareaTag.value;
+              let language = languageTag.value;
+  
+              // 결과를 초기화합니다.
+              resultTag.value = "기다리세요. 만드는 중입니다...";
+  
+              await fetch("http://127.0.0.1:3000/translater", {
+                  "method": "post",
+                  "headers": {
+                      "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({ text, language})
+              })
+              .then((response) => response.text())
+              .then((data) => {
+                  resultTag.value = data;
+              });
+          });
+      </script>
+  </body>
+</html>
